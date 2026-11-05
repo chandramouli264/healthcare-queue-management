@@ -1,0 +1,23 @@
+import { Router } from 'express';
+import authRoutes from './auth.routes';
+import userRoutes from './user.routes';
+import doctorRoutes from './doctor.routes';
+import patientRoutes from './patient.routes';
+import appointmentRoutes from './appointment.routes';
+import queueRoutes from './queue.routes';
+import prescriptionRoutes from './prescription.routes';
+import { authenticate } from '../middleware/auth';
+import { asyncHandler } from '../utils/asyncHandler';
+import { dashboardController } from '../controllers/dashboard.controller';
+
+const router = Router();
+router.get('/health', (_req, res) => res.json({ success: true, message: 'OK', data: { status: 'healthy' } }));
+router.use('/auth', authRoutes);
+router.use('/users', userRoutes);
+router.use('/doctors', doctorRoutes);
+router.use('/patients', patientRoutes);
+router.use('/appointments', appointmentRoutes);
+router.use('/queue', queueRoutes);
+router.use('/prescriptions', prescriptionRoutes);
+router.get('/dashboard/stats', authenticate, asyncHandler(dashboardController.stats));
+export default router;
